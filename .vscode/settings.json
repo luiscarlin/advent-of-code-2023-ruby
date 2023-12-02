@@ -1,0 +1,5 @@
+{
+    "editor.semanticHighlighting.enabled": true,
+    "editor.formatOnSave": true,
+    "rubyLsp.formatter": "rubocop",
+}
