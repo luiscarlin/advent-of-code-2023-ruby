@@ -1,5 +1,5 @@
 def part1
-    lines = File.readlines('input.txt', chomp: true).map { |line|
+    lines = File.readlines(File.join(__dir__, 'input.txt'), chomp: true).map { |line|
         numbers = line.scan(/\d/)
         (numbers.first + numbers.last).to_i
     }
@@ -8,7 +8,7 @@ def part1
 end
 
 def part2
-    lines = File.readlines('input.txt', chomp: true).map { |line|
+    lines = File.readlines(File.join(__dir__,'input.txt'), chomp: true).map { |line|
         matches = []
 
         for i in 0..line.length - 1
