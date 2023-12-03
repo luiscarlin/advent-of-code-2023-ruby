@@ -1,96 +1,89 @@
 # frozen_string_literal: true
 
 def part1
-  grid = []
-
-  File.foreach(File.join(__dir__, 'input.txt'), chomp: true) { |line| grid << line }
+  grid = File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
 
   rows = grid.length
   cols = grid[0].length
 
   coordinate_first_digit = Set.new
 
-  (0..rows - 1).each do |r|
-    (0..cols - 1).each do |c|
-      # get all the symbols
+  (0...rows).each do |r|
+    (0...cols).each do |c|
       next if grid[r][c].match?(/\d/) || grid[r][c] == '.'
 
-      directions = [
-        # up
-        [-1, 0],
-        # up-right
-        [-1, 1],
-        # up-left
-        [-1, -1],
-        # down,
-        [1, 0],
-        # down-right
-        [1, 1],
-        # down-left
-        [1, -1],
-        # left
-        [0, -1],
-        # right
-        [0, 1]
-      ]
+      directions = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]
 
-      # get numbers around the symbol
       directions.each do |direction|
         dr = r + direction[0]
         dc = c + direction[1]
 
         next unless grid[dr][dc]&.match?(/\d/)
 
-        # we have an number, so find coordinate of the beginning of the number and save it
         first_c = dc
-
         first_c -= 1 while grid[dr][first_c - 1].match?(/\d/)
 
         coordinate_first_digit.add([dr, first_c])
       end
     end
   end
-  # find the full number
-  nums = []
 
-  coordinate_first_digit.each do |coord|
-    r = coord[0]
-    c = coord[1]
-
-    num = grid[r][c]
-
-    while grid[r][c + 1]&.match?(/\d/)
-      num += grid[r][c + 1]
-      c += 1
-    end
-
-    nums << num.to_i
-  end
-
-  nums.sum
+  coordinate_first_digit.map { |coord| find_full_number(grid, *coord) }.sum
 end
 
-# def part2
-#   power_per_row = []
+def part2
+  grid = File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
 
-#   File.foreach(File.join(__dir__, 'input.txt')) do |line|
-#     _, rest = line.split(':')
+  rows = grid.length
+  cols = grid[0].length
 
-#     max_colors_seen = {}
+  gear_ratios = []
 
-#     num_and_colors = rest.split(/[,;]/).map(&:strip)
+  (0...rows).each do |r|
+    (0...cols).each do |c|
+      next if grid[r][c] != '*'
 
-#     num_and_colors.each do |num_color_pair|
-#       num, color = num_color_pair.split(' ')
+      directions = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]
 
-#       max_colors_seen[color] = [max_colors_seen[color].to_i, num.to_i].max
-#     end
+      first_coordinates = Set.new
 
-#     power_per_row << max_colors_seen.values.reduce(:*)
-#   end
+      directions.each do |direction|
+        dr = r + direction[0]
+        dc = c + direction[1]
 
-#   power_per_row.sum
-# end
+        next unless grid[dr][dc]&.match?(/\d/)
+
+        first_c = dc
+
+        first_c -= 1 while grid[dr][first_c - 1].match?(/\d/)
+
+        first_coordinates << [dr, first_c]
+      end
+
+      next unless first_coordinates.length == 2
+
+      inner_nums = []
+
+      first_coordinates.each do |coord|
+        inner_nums << find_full_number(grid, *coord)
+      end
+
+      gear_ratios << inner_nums.reduce(:*)
+    end
+  end
+  gear_ratios.sum
+end
+
+def find_full_number(grid, r, c)
+  num = grid[r][c]
+
+  while grid[r][c + 1]&.match?(/\d/)
+    num += grid[r][c + 1]
+    c += 1
+  end
+
+  num.to_i
+end
 
 puts "part 1: #{part1}"
-# puts "part 2: #{part2}"
+puts "part 2: #{part2}"
