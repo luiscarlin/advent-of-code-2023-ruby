@@ -26,13 +26,6 @@ def part1
   locations.min
 end
 
-def process_group(maps, input, group_name)
-  for group in maps[group_name] do
-    return input - group[:source] + group[:dest] if input.between?(group[:source], group[:source] + group[:range])
-  end
-  input
-end
-
 def map_seed_to_location(seed, maps)
   soil = process_group(maps, seed, 'seed-to-soil')
   fertilizer = process_group(maps, soil, 'soil-to-fertilizer')
@@ -52,31 +45,36 @@ def part2
 
   seeds = groups.shift.first.scan(/\d+/).map(&:to_i)
 
-  inputs = Set.new
-
-  let i = 0
-
-  while i < seeds.length
-    start = seeds[i]
-    range = seeds[i + 1]
-    inputs << (start..range)
-  end
-
   groups.each do |group|
     maps[group.shift[0...-5]] = group.map do |str|
       dest, source, range = str.split.map(&:to_i)
       { dest:, source:, range: }
-    end.sort_by { |h| h[:source] }
+    end
   end
 
-  locations = []
+  location_min = 4_202_284_818
 
-  for seed in seeds do
-    locations << map_seed_to_location(seed, maps)
+  i = 0
 
+  while i < seeds.length
+    start = seeds[i]
+    range = seeds[i + 1]
+
+    puts "start: #{start} range: #{range}"
+
+    (start...start + range).each do |seed|
+      location = map_seed_to_location(seed, maps)
+
+      next unless location < location_min
+
+      location_min = location
+      puts "location_min: #{location_min} seed: #{seed}"
+    end
+
+    i += 2
   end
 
-  locations.min
+  'DONE'
 end
 
 def process_group(maps, input, group_name)
