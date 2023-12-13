@@ -1,7 +1,22 @@
 # frozen_string_literal: true
 
 def part1
-  File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
+  # hands = []
+  bids = []
+
+  hands = []
+
+  lines = File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
+
+  lines.each do |line|
+    hand, bid = line.split(' ')
+
+    hands << { hand:, bid: }
+  end
+
+  p hands[0]
+
+  # puts 'hello bashi bashi'
 end
 
 def part2
@@ -9,4 +24,4 @@ def part2
 end
 
 puts "part 1: #{part1}"
-puts "part 2: #{part2}"
+# puts "part 2: #{part2}"
