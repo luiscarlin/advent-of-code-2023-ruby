@@ -49,7 +49,9 @@ def part2
 
   num_steps = 0
 
-  until current_nodes.all? { |node| node.end_with?('Z') }
+  repeats_every = []
+
+  until current_nodes.all? { |node| node.end_with?('Z') } || repeats_every.compact.length == current_nodes.length
 
     direction = instructions[num_steps % instructions.length]
 
@@ -58,10 +60,18 @@ def part2
     end
 
     num_steps += 1
+
+    next unless current_nodes.any? { |node| node.end_with?('Z') }
+
+    current_nodes.each_with_index do |node, index|
+      next unless node.end_with?('Z') && !repeats_every[index]
+
+      repeats_every[index] = num_steps
+    end
   end
 
-  num_steps
+  repeats_every.reduce(:lcm)
 end
 
-# puts "part 1: #{part1}"
+puts "part 1: #{part1}"
 puts "part 2: #{part2}"
