@@ -2,10 +2,14 @@
 
 def part1
   File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
+
+  'not yet implemented'
 end
 
 def part2
   File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
+
+  'not yet implemented'
 end
 
 puts "part 1: #{part1}"
