@@ -5,39 +5,63 @@ def part1
 
   instructions = lines.shift
 
-  graph = {}
+  node_connections = {}
 
   lines.each do |line|
     next if line.empty?
 
     node, left, right = line.scan(/\w+/)
 
-    graph[node] = { right:, left: }
+    node_connections[node] = { right:, left: }
   end
 
-  node = 'AAA'
-  steps = 0
+  current_node = 'AAA'
+  num_steps = 0
 
-  while node != 'ZZZ'
-    direction = instructions[steps % instructions.length]
+  while current_node != 'ZZZ'
+    direction = instructions[num_steps % instructions.length]
 
-    if direction == 'R'
-      node = graph[node][:right]
-    elsif direction == 'L'
-      node = graph[node][:left]
-    end
-
-    steps += 1
+    current_node = node_connections[current_node][direction == 'R' ? :right : :left]
+    num_steps += 1
   end
 
-  steps
+  num_steps
 end
 
 def part2
-  File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
+  lines = File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
 
-  'not yet implemented'
+  instructions = lines.shift
+
+  node_connections = {}
+
+  current_nodes = []
+
+  lines.each do |line|
+    next if line.empty?
+
+    node, left, right = line.scan(/\w+/)
+
+    current_nodes << node if node.end_with?('A')
+
+    node_connections[node] = { right:, left: }
+  end
+
+  num_steps = 0
+
+  until current_nodes.all? { |node| node.end_with?('Z') }
+
+    direction = instructions[num_steps % instructions.length]
+
+    current_nodes.each_with_index do |node, index|
+      current_nodes[index] = node_connections[node][direction == 'R' ? :right : :left]
+    end
+
+    num_steps += 1
+  end
+
+  num_steps
 end
 
-puts "part 1: #{part1}"
+# puts "part 1: #{part1}"
 puts "part 2: #{part2}"
