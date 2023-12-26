@@ -51,7 +51,7 @@ def part2
 
   repeats_every = []
 
-  until current_nodes.all? { |node| node.end_with?('Z') } || repeats_every.compact.length == current_nodes.length
+  until repeats_every.compact.length == current_nodes.length
 
     direction = instructions[num_steps % instructions.length]
 
