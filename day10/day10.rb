@@ -8,7 +8,6 @@ def part1
 
   queue = [[s_row, s_col]]
   visited = []
-  # main_loop = []
 
   while queue.length.positive?
     current_tile = queue.shift
@@ -22,14 +21,11 @@ def part1
 
     visited << current_tile
     visited.uniq!
-
-    p queue
-    puts queue.length
   end
 
-  print_visible_loop(grid, visited)
+  # print_visible_loop(grid, visited)
 
-  'not yet implemented'
+  visited.length / 2
 end
 
 def get_neighbor_tiles(grid, current_tile)
