@@ -3,43 +3,50 @@
 def part2
   raw_graph = File.readlines(File.join(__dir__, 'input.txt'), chomp: true).map(&:chars)
 
-  graph = duplicate_empty_rows(duplicate_empty_rows(raw_graph).transpose).transpose
+  sums = []
+  (2..3).each do |i|
+    graph = duplicate_empty_rows(duplicate_empty_rows(raw_graph, i).transpose, i).transpose
+    galaxies = get_galaxies_coords(graph)
 
-  galaxies = []
+    distances = galaxies.combination(2).map do |point1, point2|
+      get_manhattan_distance(point1, point2)
+    end
 
-  graph.each_with_index do |row, row_i|
+    sums << distances.sum
+    # puts "repeat: #{i}, distances: #{distances.join(',')}, sum: #{distances.sum}"
+  end
+
+  # puts "sums: #{sums.join(',')}"
+  sums[0] + ((sums[1] - sums[0]) * (1_000_000 - 2))
+end
+
+def get_galaxies_coords(graph)
+  graph.each_with_index.with_object([]) do |(row, row_i), galaxies|
     row.each_with_index do |char, col_i|
-      next if char == '.'
-
-      galaxies << [row_i, col_i]
+      galaxies << [row_i, col_i] unless char == '.'
     end
   end
-
-  distances = galaxies.combination(2).map do |point1, point2|
-    get_manhattan_distance(point1, point2)
-  end
-
-  distances.sum
 end
 
 def get_manhattan_distance(point1, point2)
-  (point1[0] - point2[0]).abs + (point1[1] - point2[1]).abs
+  point1.zip(point2).sum { |a, b| (a - b).abs }
 end
 
-def duplicate_empty_rows(graph)
+def duplicate_empty_rows(graph, replace_times)
   new_graph = []
   graph.each do |row|
-    new_graph << row
-    new_graph << row if row.all?('.')
+    if row.all?('.')
+      replace_times.times { new_graph << row }
+    else
+      new_graph << row
+    end
   end
 
   new_graph
 end
 
 def print_graph(graph)
-  graph.each do |row|
-    puts row.join
-  end
+  puts graph.map(&:join)
 end
 
 puts "part 2: #{part2}"
