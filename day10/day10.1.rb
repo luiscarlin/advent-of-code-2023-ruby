@@ -23,8 +23,6 @@ def part1
     visited.uniq!
   end
 
-  # print_visible_loop(grid, visited)
-
   visited.length / 2
 end
 
@@ -82,7 +80,7 @@ def print_visible_loop(grid, visited)
       if visited.include?([row_index, col_index])
         print grid[row_index][col_index]
       else
-        print ' '
+        print '.'
       end
     end
     puts

@@ -82,7 +82,7 @@ def print_visible_loop(grid, visited)
       if visited.include?([row_index, col_index])
         print grid[row_index][col_index]
       else
-        print ' '
+        print '.'
       end
     end
     puts
