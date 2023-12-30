@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-def part1
+def part2
   raw_graph = File.readlines(File.join(__dir__, 'input.txt'), chomp: true).map(&:chars)
 
   graph = duplicate_empty_rows(duplicate_empty_rows(raw_graph).transpose).transpose
@@ -42,4 +42,4 @@ def print_graph(graph)
   end
 end
 
-puts "part 1: #{part1}"
+puts "part 2: #{part2}"
