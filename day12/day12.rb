@@ -9,15 +9,17 @@ def part1
     springs, groups = line.split(' ')
     groups = groups.split(',').map(&:to_i)
 
-    answer += fun(springs, groups, 0)
+    score = fun(springs, groups, 0)
+
+    answer += score
   end
 
-  'not yet implemented'
+  answer
 end
 
 def fun(springs, groups, i)
   if i == springs.length
-    return 1 if is_valid(springs, groups)
+    return 1 if valid?(springs, groups)
 
     return 0
   end
@@ -34,7 +36,25 @@ def fun(springs, groups, i)
   fun(damaged_i, groups, i + 1) + fun(operational_i, groups, i + 1)
 end
 
-def is_valid(springs, groups); end
+def valid?(springs, groups)
+  current = 0
+  seen = []
+
+  for c in springs.chars
+    if c == '.'
+      seen << current if current > 0
+      current = 0
+    elsif c == '#'
+      current += 1
+    else
+      puts 'invalid'
+    end
+
+  end
+  seen << current if current > 0
+
+  seen == groups
+end
 
 def part2
   File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
