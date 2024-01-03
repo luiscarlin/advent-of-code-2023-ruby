@@ -3,37 +3,38 @@
 def part1
   lines = File.readlines(File.join(__dir__, 'input.txt'), chomp: true)
 
-  answer = 0
+  num_arrangements = 0
 
   lines.each do |line|
     springs, groups = line.split(' ')
     groups = groups.split(',').map(&:to_i)
 
-    score = fun(springs, groups, 0)
-
-    answer += score
+    num_arrangements += calculate_arrangements(springs, groups, 0)
   end
 
-  answer
+  num_arrangements
 end
 
-def fun(springs, groups, i)
+def calculate_arrangements(springs, groups, i)
   if i == springs.length
     return 1 if valid?(springs, groups)
 
     return 0
   end
 
-  return fun(springs, groups, i + 1) if springs[i] != '?'
+  if springs[i] in ['.', '#']
+    return calculate_arrangements(springs, groups, i + 1)
+  end
 
   # char is ?
+
   springs_before_i = springs[0, i]
   springs_after_i = springs[i + 1, springs.length]
 
   damaged_i = "#{springs_before_i}##{springs_after_i}"
   operational_i = "#{springs_before_i}.#{springs_after_i}"
 
-  fun(damaged_i, groups, i + 1) + fun(operational_i, groups, i + 1)
+  calculate_arrangements(damaged_i, groups, i + 1) + calculate_arrangements(operational_i, groups, i + 1)
 end
 
 def valid?(springs, groups)
