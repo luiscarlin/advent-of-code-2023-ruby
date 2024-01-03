@@ -22,19 +22,20 @@ def calculate_arrangements(springs, groups, i)
     return 0
   end
 
-  if springs[i] in ['.', '#']
-    return calculate_arrangements(springs, groups, i + 1)
-  end
+  return calculate_arrangements(springs, groups, i + 1) if ['.', '#'].include?(springs[i])
 
-  # char is ?
-
+  # at this point char is ?
+  # find the number of arrangements when char is # and when char is .
   springs_before_i = springs[0, i]
   springs_after_i = springs[i + 1, springs.length]
 
   damaged_i = "#{springs_before_i}##{springs_after_i}"
   operational_i = "#{springs_before_i}.#{springs_after_i}"
 
-  calculate_arrangements(damaged_i, groups, i + 1) + calculate_arrangements(operational_i, groups, i + 1)
+  num_when_i_damaged = calculate_arrangements(damaged_i, groups, i + 1)
+  num_when_i_operational = calculate_arrangements(operational_i, groups, i + 1)
+
+  num_when_i_damaged + num_when_i_operational
 end
 
 def valid?(springs, groups)
