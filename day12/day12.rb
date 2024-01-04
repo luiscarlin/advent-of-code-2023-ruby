@@ -17,7 +17,10 @@ end
 
 def calculate_arrangements(springs, groups, i)
   if i == springs.length
-    return 1 if valid?(springs, groups)
+    # we have reached the end of the string
+
+    is_spring_valid = springs.scan(/#+/).map(&:length) == groups
+    return 1 if is_spring_valid
 
     return 0
   end
@@ -36,26 +39,6 @@ def calculate_arrangements(springs, groups, i)
   num_when_i_operational = calculate_arrangements(operational_i, groups, i + 1)
 
   num_when_i_damaged + num_when_i_operational
-end
-
-def valid?(springs, groups)
-  current = 0
-  seen = []
-
-  for c in springs.chars
-    if c == '.'
-      seen << current if current > 0
-      current = 0
-    elsif c == '#'
-      current += 1
-    else
-      puts 'invalid'
-    end
-
-  end
-  seen << current if current > 0
-
-  seen == groups
 end
 
 def part2
