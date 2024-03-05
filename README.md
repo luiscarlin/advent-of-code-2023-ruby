@@ -1,4 +1,4 @@
-# Advent of Code 2023 in Ruby
+# Advent of Code 2023 Ruby
 
 My solutions to Advent of Code 2023 in Ruby
 
