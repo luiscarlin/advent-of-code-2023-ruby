@@ -16,7 +16,7 @@ rvm use
 bundle install
 
 # start day
-./bin/start day04
+bin/start day04
 
 ```
 
